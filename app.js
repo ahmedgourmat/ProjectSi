@@ -2,6 +2,8 @@ const express = require('express')
 const app = express()
 const connectDB = require('./DB/activateDb')
 const productRoutes = require('./routes/ProductRoutes')
+const fournisseurRoutes = require('./routes/FournisseurRoutes')
+const clientRoutes = require('./routes/ClientRoutes')
 
 require('dotenv').config()
 
@@ -14,6 +16,10 @@ app.use(express.json())
 
 
 app.use('/api/v1/products' , productRoutes)
+app.use('/api/v1/fournisseur' , fournisseurRoutes)
+app.use('/api/v1/client' , clientRoutes)
+
+
 
 
 const start = ()=>{
