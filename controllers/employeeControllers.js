@@ -21,6 +21,9 @@ const postEmployee = async (req, res) => {
     try {
 
         const center = await Center.findOne({codeCt})
+        if(!center){
+            throw Error('there is no center with this code')
+        }
 
         const employee = await Employee.findOne({codeE})
 

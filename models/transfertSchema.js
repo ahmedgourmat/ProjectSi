@@ -17,7 +17,7 @@ const AchatSchema = new mongoose.Schema({
     Cout : Number
 })
 
-const Achat = mongoose.model('Achat' , AchatSchema)
+const Transfert = mongoose.model('Transfert' , AchatSchema)
 
 
-module.exports = Achat
+module.exports = Transfert

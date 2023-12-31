@@ -7,6 +7,9 @@ const clientRoutes = require('./routes/ClientRoutes')
 const centerRoutes = require('./routes/CenterRoutes')
 const employeeRoutes = require('./routes/EmployeeCenter')
 const achatRoutes = require('./routes/AchatRoutes')
+const transfertRoutes = require('./routes/TransfertRoutes')
+const venteRoutes = require('./routes/VenteRoutes')
+
 
 require('dotenv').config()
 
@@ -24,6 +27,9 @@ app.use('/api/v1/client' , clientRoutes)
 app.use('/api/v1/center' , centerRoutes)
 app.use('/api/v1/employee' , employeeRoutes)
 app.use('/api/v1/achat' , achatRoutes)
+app.use('/api/v1/transfert' , transfertRoutes)
+app.use('/api/v1/vente' , venteRoutes)
+
 
 
 
