@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const ClientSchema = new mongoose.Schema({
+const CenterSchema = new mongoose.Schema({
     codeCt : {
         type : String,
         required : true
@@ -8,7 +8,7 @@ const ClientSchema = new mongoose.Schema({
     designCt : String
 })
 
-const Client = mongoose.model('Client' , ClientSchema)
+const Center = mongoose.model('Center' , CenterSchema)
 
 
-module.exports = Client
+module.exports = Center
