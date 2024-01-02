@@ -19,12 +19,21 @@ const getProducts = async(req,res)=>{
 const postProduct = async(req,res)=>{
 
     const {codeP , designP , qteStock} = req.body
+
     try {
+
+        const product = await Product.findOne({codeP})
+
+        if(product){
+            throw Error('There is already a product with this codeP')
+        }
+
+
         const data = await Product.create({codeP , designP , qteStock})
         // console.log(data) 
         res.status(201).json({data})
     } catch (error) {
-        console.log({error : error.message})
+        res.status(500).json({error : error.message})
     }
 }
 

@@ -11,7 +11,7 @@ const EmployeeSchema = new mongoose.Schema({
     telE : String ,
     salaire : Number,
     codeCt : {
-        type : mongoose.Schema.Types.ObjectId,
+        type : mongoose.Schema.Types.String,
         ref : 'Center'
     }
 })

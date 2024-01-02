@@ -31,7 +31,7 @@ const postEmployee = async (req, res) => {
             throw Error('there is already a Employee with this codeE')
         }
 
-      const data = await Employee.create({codeE,prenomE , nomE ,adrE ,telE , salaire , codeCt : center._id})
+      const data = await Employee.create({codeE,prenomE , nomE ,adrE ,telE , salaire , codeCt})
       res.status(201).json(data);
     } catch (error) {
       res.status(400).json({ error: error.message });
