@@ -17,9 +17,15 @@ const getVente = async (req, res) => {
 }
 
 const postVente = async (req, res) => {
-    const {dateV , codeCl , codeP , qteV , montantV} = req.body
+    const {dateV , codeCl , codeP , qteV} = req.body
+    console.log(req.body)
   
     try {
+        console.log(req.body)
+        if(!dateV || !codeCl || !codeP || !qteV ){
+            throw Error('Please Fill all the fields')
+        }
+
         const client = await Client.findOne({codeCl})
         if(!client){
             throw Error('there is no client with this code')
@@ -32,13 +38,16 @@ const postVente = async (req, res) => {
         }
 
 
-        const vente = await Vente.findOne({dateV ,codeCl : client._id , codeP : product._id })
+        const vente = await Vente.findOne({dateV ,codeCl, codeP })
 
         if(vente){
             throw Error('there is already a Vente with this date and codeCl and codeP')
         }
 
-      const data = await Vente.create({dateV , codeCl : client._id , codeP : product._id , qteV , montantV })
+
+        const montantV = qteV * product.price
+
+      const data = await Vente.create({dateV , codeCl, codeP , qteV , montantV })
       res.status(201).json(data);
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -61,7 +70,7 @@ const oneVente = async(req,res)=>{
     }
 
     try {
-        const vente = await Vente.findOne({dateV , codeCl : client._id , codeP : product._id})
+        const vente = await Vente.findOne({dateV , codeCl, codeP})
         // console.log(vente)
         if(vente){
             res.status(200).json(vente)
@@ -76,9 +85,11 @@ const oneVente = async(req,res)=>{
 
 
 const updateVente = async(req,res)=>{
-    const {dateV , codeCl , codeP} = req.params
+    const {dateA , codeCl , codeP} = req.params
 
-    const {qteV , montantV} = req.body
+    console.log(req.params)
+
+    const {qteV} = req.body
 
     const client = await Client.findOne({codeCl})
     
@@ -93,7 +104,10 @@ const updateVente = async(req,res)=>{
     }
 
     try {
-        const vente = await Vente.findOneAndUpdate({dateV , codeCl : client._id , codeP : product._id} ,{qteV , montantV})
+
+        const montantV = qteV * product.price
+
+        const vente = await Vente.findOneAndUpdate({dateV : dateA , codeCl, codeP} ,{qteV , montantV})
         // console.log(vente)
         if(vente){
             res.status(200).json(vente)
@@ -106,7 +120,8 @@ const updateVente = async(req,res)=>{
 }
 
 const deleteVente = async(req,res)=>{
-    const {dateV , codeCl , codeP} = req.params
+    const {dateA , codeCl , codeP} = req.params
+    console.log(req.params)
 
     const client = await Client.findOne({codeCl})
     
@@ -121,8 +136,9 @@ const deleteVente = async(req,res)=>{
     }
 
     try {
-        const vente = await Vente.findOneAndDelete({dateV , codeCl : client._id , codeP : product._id})
-        // console.log(vente)
+        console.log({dateA , codeCl, codeP})
+        const vente = await Vente.findOneAndDelete({dateV : dateA , codeCl, codeP})
+        console.log(vente)
         if(vente){
             res.status(200).json(vente)
         }else{

@@ -5,7 +5,7 @@ const {getVente , postVente , oneVente , updateVente , deleteVente} = require('.
 
 routes.route('/').post(postVente).get(getVente)
 
-routes.route('/:dateA/:codeCt/:codeP').get(oneVente).patch(updateVente).delete(deleteVente)
+routes.route('/:dateA/:codeCl/:codeP').get(oneVente).patch(updateVente).delete(deleteVente)
 
 
 module.exports = routes

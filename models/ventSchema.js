@@ -6,16 +6,16 @@ const VenteSchema = new mongoose.Schema({
         required : true
     },
     codeCl : {
-        type : mongoose.Schema.Types.ObjectId,
+        type : mongoose.Schema.Types.String,
         ref : 'Client',
         required : true
     },
     codeP : {
-        type : mongoose.Schema.Types.ObjectId,
+        type : mongoose.Schema.Types.String,
         ref : 'Product',
         required : true
     },
-    qte : Number,
+    qteV : Number,
     montantV : Number 
 
 })
