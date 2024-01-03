@@ -17,28 +17,35 @@ const getAchat = async (req, res) => {
 }
 
 const postAchat = async (req, res) => {
-    const {dateA , codeF , codeP , qteA , montant} = req.body
+    const {dateA , codeF , codeP , qteA} = req.body
   
     try {
+
+        if(!dateA  || !codeF || !codeP || !qteA ){
+            throw Error('Please Fill All the fields')
+        }
+
         const fournisseur = await Fournisseur.findOne({codeF})
         if(!fournisseur){
-            throw Error('there is no fournisseur with this code')
+            throw Error('there is no fournisseur with this code. want to create one ?')
         }
 
         const product = await Product.findOne({codeP})
 
         if(!product){
-            throw Error('there is no product with this code')
+            throw Error('there is no product with this code. want to create one ?')
         }
 
 
-        const achat = await Achat.findOne({dateA ,codeF : fournisseur._id , codeP : product._id })
+        const achat = await Achat.findOne({dateA ,codeF, codeP})
 
         if(achat){
             throw Error('there is already a Achat with this date and codeF and codeP')
         }
 
-      const data = await Achat.create({dateA , codeF : fournisseur._id , codeP : product._id , qteA , montant })
+        const montant = product.price * qteA
+
+      const data = await Achat.create({dateA , codeF, codeP , qteA , montant })
       res.status(201).json(data);
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -78,7 +85,7 @@ const oneAchat = async(req,res)=>{
 const updateAchat = async(req,res)=>{
     const {dateA , codeF , codeP} = req.params
 
-    const {qteA , montant} = req.body
+    const {qteA} = req.body
 
     const fournisseur = await Fournisseur.findOne({codeF})
     
@@ -93,7 +100,11 @@ const updateAchat = async(req,res)=>{
     }
 
     try {
-        const achat = await Achat.findOneAndUpdate({dateA , codeF : fournisseur._id , codeP : product._id} ,{qteA , montant})
+
+        const montant = qteA * product.price
+
+        const achat = await Achat.findOneAndUpdate({dateA , codeF , codeP} ,{qteA , montant})
+
         // console.log(achat)
         if(achat){
             res.status(200).json(achat)
@@ -108,20 +119,9 @@ const updateAchat = async(req,res)=>{
 const deleteAchat = async(req,res)=>{
     const {dateA , codeF , codeP} = req.params
 
-    const fournisseur = await Fournisseur.findOne({codeF})
-    
-    if(!fournisseur){
-        throw Error('there is no fournisseur with this code')
-    }
-
-    const product = await Product.findOne({codeP})
-
-    if(!product){
-        throw Error('there is no product with this code')
-    }
 
     try {
-        const achat = await Achat.findOneAndDelete({dateA , codeF : fournisseur._id , codeP : product._id})
+        const achat = await Achat.findOneAndDelete({dateA , codeF , codeP })
         // console.log(achat)
         if(achat){
             res.status(200).json(achat)

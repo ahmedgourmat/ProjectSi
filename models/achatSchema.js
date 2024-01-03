@@ -6,11 +6,11 @@ const AchatSchema = new mongoose.Schema({
         required : true 
     },
     codeF:{
-        type : mongoose.Schema.Types.ObjectId,
+        type : mongoose.Schema.Types.String,
         ref : 'Fournisseur'
     },
     codeP : {
-        type : mongoose.Schema.Types.ObjectId,
+        type : mongoose.Schema.Types.String,
         ref : 'Product'
     },
     qteA : Number,

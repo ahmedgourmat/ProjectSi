@@ -18,7 +18,7 @@ const getProducts = async(req,res)=>{
 
 const postProduct = async(req,res)=>{
 
-    const {codeP , designP , qteStock} = req.body
+    const {codeP , designP , qteStock , price} = req.body
 
     try {
 
@@ -29,7 +29,7 @@ const postProduct = async(req,res)=>{
         }
 
 
-        const data = await Product.create({codeP , designP , qteStock})
+        const data = await Product.create({codeP , designP , qteStock , price})
         // console.log(data) 
         res.status(201).json({data})
     } catch (error) {
@@ -58,10 +58,10 @@ const oneProduct = async(req,res)=>{
 
 const updateProduct = async(req,res)=>{
     const {codeP} = req.params
-    const {designP , qteStock} = req.body
+    const {designP , qteStock , price} = req.body
 
     try {
-        const product = await Product.findOneAndUpdate({codeP} ,{designP , qteStock})
+        const product = await Product.findOneAndUpdate({codeP} ,{designP , qteStock , price})
         // console.log(data)
         if(product){
             res.status(200).json(product)

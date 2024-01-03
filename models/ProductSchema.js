@@ -6,7 +6,8 @@ const ProductSchema = new mongoose.Schema({
         required : true
     },
     designP : String,
-    qteStock : Number
+    qteStock : Number,
+    price : Number
 })
 
 const Product = mongoose.model('Product' , ProductSchema)
