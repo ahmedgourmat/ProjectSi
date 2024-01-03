@@ -18,7 +18,7 @@ const getProducts = async(req,res)=>{
 
 const postProduct = async(req,res)=>{
 
-    const {codeP , designP , qteStock , price} = req.body
+    const {codeP , designP , price} = req.body
 
     try {
 
@@ -28,6 +28,7 @@ const postProduct = async(req,res)=>{
             throw Error('There is already a product with this codeP')
         }
 
+        const qteStock = 0
 
         const data = await Product.create({codeP , designP , qteStock , price})
         // console.log(data) 

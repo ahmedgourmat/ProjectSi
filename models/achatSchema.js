@@ -14,7 +14,8 @@ const AchatSchema = new mongoose.Schema({
         ref : 'Product'
     },
     qteA : Number,
-    montant : Number
+    montant : Number,
+    payed : Number
 })
 
 const Achat = mongoose.model('Achat' , AchatSchema)

@@ -14,7 +14,7 @@ const getFournisseur = async (req, res) => {
 }
 
 const postFournisseur = async (req, res) => {
-    const {codeF,prenomF , nomF ,adrF ,telF , solde} = req.body
+    const {codeF,prenomF , nomF ,adrF ,telF} = req.body
   
     try {
 
@@ -23,6 +23,7 @@ const postFournisseur = async (req, res) => {
         if(data){
             throw Error('there is already a fournisseur with this codeF')
         }
+        const solde = 0
 
       const fournisseur = await Fournisseur.create({codeF,prenomF , nomF ,adrF ,telF , solde})
       res.status(201).json(fournisseur);

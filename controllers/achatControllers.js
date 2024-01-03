@@ -17,7 +17,7 @@ const getAchat = async (req, res) => {
 }
 
 const postAchat = async (req, res) => {
-    const {dateA , codeF , codeP , qteA} = req.body
+    const {dateA , codeF , codeP , qteA , payed} = req.body
   
     try {
 
@@ -45,7 +45,19 @@ const postAchat = async (req, res) => {
 
         const montant = product.price * qteA
 
-      const data = await Achat.create({dateA , codeF, codeP , qteA , montant })
+        if(montant < payed ){
+            throw Error('you payed to much didn\'t you ?')
+        }
+        const solde = (montant + fournisseur.solde) - payed
+
+        const qteStock = product.qteStock + qteA
+
+      const data = await Achat.create({dateA , codeF, codeP , qteA , payed , montant})
+
+      await Product.findOneAndUpdate({codeP} , {qteStock})
+
+      await Fournisseur.findOneAndUpdate({codeF},{solde})
+
       res.status(201).json(data);
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -83,7 +95,7 @@ const oneAchat = async(req,res)=>{
 
 
 const updateAchat = async(req,res)=>{
-    const {dateA , codeF , codeP} = req.params
+    const {dateA , codeF , codeP , payed} = req.params
 
     const {qteA} = req.body
 
