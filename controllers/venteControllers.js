@@ -17,8 +17,7 @@ const getVente = async (req, res) => {
 }
 
 const postVente = async (req, res) => {
-    const {dateV , codeCl , codeP , qteV} = req.body
-    console.log(req.body)
+    const {dateV , codeCl , codeP , qteV , payed} = req.body
   
     try {
         console.log(req.body)
@@ -37,17 +36,36 @@ const postVente = async (req, res) => {
             throw Error('there is no product with this code')
         }
 
+        if(qteV> product.qteStock){
+            throw Error('We dont have this quantity')
+        }
+
+        const qteStock = product.qteStock - qteV
+
+        
+        const montantV = qteV * product.price
+        if(payed > montantV){
+            throw Error('that\' to much money')
+        }
+        const rest = montantV - payed
+        
+        const credit = client.credit + rest
 
         const vente = await Vente.findOne({dateV ,codeCl, codeP })
+
+        await Product.findOneAndUpdate({codeP} , {qteStock})
+
+        await Client.findOneAndUpdate({codeCl} , {credit})
+
 
         if(vente){
             throw Error('there is already a Vente with this date and codeCl and codeP')
         }
 
 
-        const montantV = qteV * product.price
+       
 
-      const data = await Vente.create({dateV , codeCl, codeP , qteV , montantV })
+      const data = await Vente.create({dateV , codeCl, codeP , qteV , montantV  , rest})
       res.status(201).json(data);
     } catch (error) {
       res.status(400).json({ error: error.message });

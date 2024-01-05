@@ -17,7 +17,7 @@ const getTransfert = async (req, res) => {
 }
 
 const postTransfert = async (req, res) => {
-    const {dateT , codeCt , codeP , qteT , Cout} = req.body
+    const {dateT , codeCt , codeP , qteT , payed} = req.body
   
     try {
         const center = await Center.findOne({codeCt})
@@ -32,13 +32,25 @@ const postTransfert = async (req, res) => {
         }
 
 
-        const transfert = await Transfert.findOne({dateT ,codeCt : center._id , codeP : product._id })
+        const transfert = await Transfert.findOne({dateT ,codeCt , codeP  })
 
         if(transfert){
             throw Error('there is already a Transfert with this date and codeCt and codeP')
         }
 
-      const data = await Transfert.create({dateT , codeCt : center._id , codeP : product._id , qteT , Cout })
+        const Cout = product.price * qteT
+        if(qteT> product.qteStock){
+            throw Error('We dont have this quantity')
+        }
+
+        const qteStock = product.qteStock - qteT
+
+        const rest = Cout - payed
+
+      const data = await Transfert.create({dateT , codeCt , codeP  , qteT , Cout , payed , rest })
+
+      await Product.findOneAndUpdate({codeP} , {qteStock})
+
       res.status(201).json(data);
     } catch (error) {
       res.status(400).json({ error: error.message });
@@ -61,7 +73,7 @@ const oneTransfert = async(req,res)=>{
     }
 
     try {
-        const transfert = await Transfert.findOne({dateT , codeCt : center._id , codeP : product._id})
+        const transfert = await Transfert.findOne({dateT , codeCt , codeP })
         // console.log(transfert)
         if(transfert){
             res.status(200).json(transfert)
@@ -78,7 +90,7 @@ const oneTransfert = async(req,res)=>{
 const updateTransfert = async(req,res)=>{
     const {dateT , codeCt , codeP} = req.params
 
-    const {qteT , Cout} = req.body
+    const {qteT , payed} = req.body
 
     const center = await Center.findOne({codeCt})
     
@@ -92,8 +104,24 @@ const updateTransfert = async(req,res)=>{
         throw Error('there is no product with this code')
     }
 
+    if(qteT> product.qteStock){
+        throw Error('We dont have this quantity')
+    }
+
+    const qteStock = product.qteStock - qteT
+
+    await Product.findOneAndUpdate({codeP} , {qteStock})
+
+    const transfert = await Transfert.findOne({dateT , codeCt , codeP })
+
+    if(payed> transfert.rest){
+        throw Error('that\'s a lot of money')
+    }
+
+    const rest = transfert.rest - payed
+
     try {
-        const transfert = await Transfert.findOneAndUpdate({dateT , codeCt : center._id , codeP : product._id} ,{qteT , Cout})
+        const transfert = await Transfert.findOneAndUpdate({dateT , codeCt , codeP } ,{qteT , rest})
         // console.log(transfert)
         if(transfert){
             res.status(200).json(transfert)
@@ -106,7 +134,7 @@ const updateTransfert = async(req,res)=>{
 }
 
 const deleteTransfert = async(req,res)=>{
-    const {dateT , codeCt , codeP} = req.params
+    const {dateA , codeCt , codeP} = req.params
 
     const center = await Center.findOne({codeCt})
     
@@ -121,7 +149,7 @@ const deleteTransfert = async(req,res)=>{
     }
 
     try {
-        const transfert = await Transfert.findOneAndDelete({dateT , codeCt : center._id , codeP : product._id})
+        const transfert = await Transfert.findOneAndDelete({dateT : dateA , codeCt , codeP })
         // console.log(transfert)
         if(transfert){
             res.status(200).json(transfert)

@@ -14,7 +14,7 @@ const getClient = async (req, res) => {
 }
 
 const postClient = async (req, res) => {
-    const {codeCl,prenomCl , nomCl ,adrCl ,telCl , credit} = req.body
+    const {codeCl,prenomCl , nomCl ,adrCl ,telCl } = req.body
   
     try {
 
@@ -24,6 +24,7 @@ const postClient = async (req, res) => {
             throw Error('there is already a Client with this codeCl')
         }
 
+        const credit = 0
       const data = await Client.create({codeCl,prenomCl , nomCl ,adrCl ,telCl , credit})
       res.status(201).json(data);
     } catch (error) {

@@ -6,15 +6,17 @@ const TransfertSchema = new mongoose.Schema({
         required : true 
     },
     codeCt:{
-        type : mongoose.Schema.Types.ObjectId,
+        type : mongoose.Schema.Types.String,
         ref : 'Center'
     },
     codeP : {
-        type : mongoose.Schema.Types.ObjectId,
+        type : mongoose.Schema.Types.String,
         ref : 'Product'
     },
     qteT : Number,
-    Cout : Number
+    Cout : Number,
+    payed : Number,
+    rest: Number
 })
 
 const Transfert = mongoose.model('Transfert' , TransfertSchema)

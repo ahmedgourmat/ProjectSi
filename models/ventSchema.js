@@ -16,7 +16,8 @@ const VenteSchema = new mongoose.Schema({
         required : true
     },
     qteV : Number,
-    montantV : Number 
+    montantV : Number,
+    rest : Number
 
 })
 
