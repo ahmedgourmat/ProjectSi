@@ -1,10 +1,11 @@
-const Product = require('../models/ProductSchema')
 const CenterProduct = require('../models/centerProduct')
-const Center = require('../models/centerSchema')
 
 const getCenterProduct = async (req,res)=>{
+
+    const codeCt = req.user.codeCt
+
     try {
-        const data = await CenterProduct.find({})
+        const data = await CenterProduct.find({codeCt})
         res.status(200).json(data)
     } catch (error) {
         res.status(404).json({error : error.message})
@@ -14,41 +15,27 @@ const getCenterProduct = async (req,res)=>{
 
 const postCenterProduct = async(req , res)=>{
 
-    const {codeCp , name , designCp , price , codeCt , codeP} = req.body
-    console.log(req.body)
+    const {codeCp , name , designCp , price , codeCt} = req.body
 
     try {
 
-        if(!codeCp || !name || !codeCt || !designCp || !price || !codeCt || !codeP){
+        if(!codeCp || !name || !codeCt || !designCp || !price || !codeCt){
             throw Error('Please Fill All The Fields')
         }
 
-        const centerProduct = await CenterProduct.findOne({codeCp})
-
-        if(centerProduct){
-            throw Error('There is already a center product with this code')
-        }
-        const center = await Center.findOne({codeCt})
+        const product = await CenterProduct.findOne({codeCp , codeCt})
 
 
-        if(!center){
-            throw Error('there is no Product with this code')
+        if(product){
+            throw Error('This Product already exist in this Center')
         }
 
-        const product = await Product.findOne({codeP})
-
-
-        if(!product){
-            throw Error('there is no Product with this code')
-        }
-
-
-        const data = await CenterProduct.create({codeCp , name , designCp , price , quantity : 0 , codeCt , codeP})
+        const data = await CenterProduct.create({codeCp , name , designCp , price , quantity : 0 , codeCt })
 
         res.status(201).json(data)
         
     } catch (error) {
-        res.json(500).json({error : error.message})
+        res.status(500).json({error : error.message})
     }
 }
 

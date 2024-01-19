@@ -1,6 +1,7 @@
 const Product = require('../models/ProductSchema')
 
 const getProducts = async(req,res)=>{
+
     try {
         const data = await Product.find({})
 

@@ -13,10 +13,6 @@ const CenterProductSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.String,
         ref : 'Center',
         required : true
-    },
-    codeP : {
-        type : mongoose.Schema.Types.String,
-        ref : 'Product'
     }
 })
 

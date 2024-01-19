@@ -13,6 +13,10 @@ const venteRoutes = require('./routes/VenteRoutes')
 const centerProductRoutes = require('./routes/CenterProductRoutes')
 const centerVent = require('./routes/VenteCenterRoutes')
 const centerClient = require('./routes/CenterClientRoutes')
+const authRoutes = require('./routes/AuthRoutes/Auth')
+const centerAuthRoutes = require('./routes/AuthRoutes/AuthCenter')
+const authMiddleware = require('./middleware/AuthMiddleware')
+const centerAuthMiddleware = require('./middleware/AuthCenterMiddleware')
 
 require('dotenv').config()
 
@@ -24,37 +28,40 @@ port = process.env.PORT
 app.use(express.json())
 app.use(cors())
 
-
-app.use('/api/v1/products' , productRoutes)
-app.use('/api/v1/fournisseur' , fournisseurRoutes)
-app.use('/api/v1/client' , clientRoutes)
-app.use('/api/v1/center' , centerRoutes)
-app.use('/api/v1/employee' , employeeRoutes)
-app.use('/api/v1/achat' , achatRoutes)
-app.use('/api/v1/transfert' , transfertRoutes)
-app.use('/api/v1/vente' , venteRoutes)
-app.use('/api/v1/centerProduct' , centerProductRoutes)
-app.use('/api/v1/ventCenter' , centerVent)
-app.use('/api/v1/centerClient' , centerClient)
-
-
-
+app.use('/api/v1/', authRoutes)
+app.use('/api/v1/center', centerAuthRoutes)
+app.use('/api/v1/products', authMiddleware, productRoutes)
+app.use('/api/v1/fournisseur', authMiddleware, fournisseurRoutes)
+app.use('/api/v1/client', authMiddleware, clientRoutes)
+app.use('/api/v1/center', authMiddleware, centerRoutes)
+app.use('/api/v1/employee', authMiddleware, employeeRoutes)
+app.use('/api/v1/achat', authMiddleware, achatRoutes)
+app.use('/api/v1/transfert', authMiddleware, transfertRoutes)
+app.use('/api/v1/vente', authMiddleware, venteRoutes)
+app.use('/api/v1/centerProduct', centerAuthMiddleware, centerProductRoutes)
+app.use('/api/v1/ventCenter', centerAuthMiddleware, centerVent)
+app.use('/api/v1/centerClient', centerAuthMiddleware, centerClient)
 
 
 
 
 
 
-const start = ()=>{
+
+
+
+
+
+const start = () => {
     connectDB(process.env.MONGOO_URI)
-    .then(()=>{
-        app.listen(port,()=>(
-            console.log(`app is listne to the port ${port}`)
-        ))
-    })
-    .catch((err)=>{
-        console.log(err)
-    })
+        .then(() => {
+            app.listen(port, () => (
+                console.log(`app is listne to the port ${port}`)
+            ))
+        })
+        .catch((err) => {
+            console.log(err)
+        })
 }
 
 start()
