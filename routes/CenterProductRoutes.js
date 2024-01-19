@@ -5,7 +5,7 @@ const {getCenterProduct , postCenterProduct , updateCenterProduct , deleteCenter
 
 routes.route('/').post(postCenterProduct).get(getCenterProduct)
 
-routes.route('/:codeCp').patch(updateCenterProduct).delete(deleteCenterProduct)
+routes.route('/:codeCp/:codeCt').patch(updateCenterProduct).delete(deleteCenterProduct)
 
 
 module.exports = routes

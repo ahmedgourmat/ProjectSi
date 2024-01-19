@@ -34,13 +34,13 @@ app.use('/api/v1/products', authMiddleware, productRoutes)
 app.use('/api/v1/fournisseur', authMiddleware, fournisseurRoutes)
 app.use('/api/v1/client', authMiddleware, clientRoutes)
 app.use('/api/v1/center', authMiddleware, centerRoutes)
-app.use('/api/v1/employee', authMiddleware, employeeRoutes)
 app.use('/api/v1/achat', authMiddleware, achatRoutes)
 app.use('/api/v1/transfert', authMiddleware, transfertRoutes)
 app.use('/api/v1/vente', authMiddleware, venteRoutes)
 app.use('/api/v1/centerProduct', centerAuthMiddleware, centerProductRoutes)
 app.use('/api/v1/ventCenter', centerAuthMiddleware, centerVent)
 app.use('/api/v1/centerClient', centerAuthMiddleware, centerClient)
+app.use('/api/v1/employee', centerAuthMiddleware, employeeRoutes)
 
 
 

@@ -30,7 +30,9 @@ const postCenterProduct = async(req , res)=>{
             throw Error('This Product already exist in this Center')
         }
 
-        const data = await CenterProduct.create({codeCp , name , designCp , price , quantity : 0 , codeCt })
+        const quantite = 0
+
+        const data = await CenterProduct.create({codeCp , name , designCp , price , quantite, codeCt })
 
         res.status(201).json(data)
         
@@ -40,25 +42,39 @@ const postCenterProduct = async(req , res)=>{
 }
 
 
-const updateCenterProduct = async(req , res)=>{
-    const {codeCp} = req.params
-    const {name , designCp , price , quantity} = req.body
+const updateCenterProduct = async (req, res) => {
+    const { codeCp, codeCt } = req.params;
+    const { name, designCp, price, quantite } = req.body;
 
-    try {
-        
-        if(quantity < 0 || price < 0 ){
-            throw Error('Enter Real Values')
+    console.log(req.params)
+
+    try {   
+        if (quantite < 0 || price < 0) {
+            throw Error('Enter Real Values');
         }
 
-        const data = await CenterProduct.findByIdAndUpdate({codeCp} ,{name , designCp , price , quantity} )
+        // Assuming codeCp and codeCt are string values
+        const data = await CenterProduct.findOneAndUpdate(
+            { codeCp , codeCt},
+            { name, designCp, price, quantite },
+            { new: true } // This option returns the modified document rather than the original
+        );
 
-        res.status(200).json(data)
-    
+
+        if (data) {
+            console.log('Updated document:', data);
+            res.status(200).json(data);
+        } else {
+            console.log('Document not found');
+            res.status(404).json({ error: 'Document not found' });
+        }
+
     } catch (error) {
-        res.status(500).json({error : error.message})
+        console.error('Error updating document:', error);
+        res.status(500).json({ error: error.message });
     }
+};
 
-}
 
 const deleteCenterProduct = async(req,res)=>{
     const {codeCp} = req.params

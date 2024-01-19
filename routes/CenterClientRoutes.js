@@ -5,7 +5,7 @@ const {getCenterClient , postCenterClient  , deleteCenterClient} = require('../c
 
 routes.route('/').post(postCenterClient).get(getCenterClient)
 
-routes.route('/:codeCp').delete(deleteCenterClient)
+routes.route('/:codeCp/:codeCt').delete(deleteCenterClient)
 
 
 module.exports = routes

@@ -9,6 +9,7 @@ const EmployeeSchema = new mongoose.Schema({
     prenomE : String,
     adrE : String ,
     telE : String ,
+    massrouf : Number,
     salaire : Number,
     codeCt : {
         type : mongoose.Schema.Types.String,
