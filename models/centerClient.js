@@ -14,7 +14,7 @@ const CenterClientSchema = new mongoose.Schema({
     prenomCc : String,
     telCc : String,
     adrCc : String,
-    credit : String
+    credit : Number
 })
 
 const CenterClient = mongoose.model('CenterClient' , CenterClientSchema)

@@ -7,7 +7,8 @@ const ProductSchema = new mongoose.Schema({
     },
     designP : String,
     qteStock : Number,
-    price : Number
+    price : Number,
+    nameP : String
 })
 
 const Product = mongoose.model('Product' , ProductSchema)

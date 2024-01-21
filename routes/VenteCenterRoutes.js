@@ -5,7 +5,7 @@ const {getVentCenter , postVentCenter, deleteVentCenter} = require('../controlle
 
 routes.route('/').post(postVentCenter).get(getVentCenter)
 
-routes.route('/:dateA/:codeCl/:codeP').delete(deleteVentCenter)
+routes.route('/:dateVc/:codeCc/:codeCp/:codeCt').delete(deleteVentCenter)
 
 
 module.exports = routes

@@ -15,11 +15,11 @@ const getCenterProduct = async (req,res)=>{
 
 const postCenterProduct = async(req , res)=>{
 
-    const {codeCp , name , designCp , price , codeCt} = req.body
+    const {codeCp , name , designCp , price , codeCt ,quantite} = req.body
 
     try {
 
-        if(!codeCp || !name || !codeCt || !designCp || !price || !codeCt){
+        if(!codeCp || !name || !codeCt || !designCp || !price || !quantite || !codeCt){
             throw Error('Please Fill All The Fields')
         }
 
@@ -29,8 +29,6 @@ const postCenterProduct = async(req , res)=>{
         if(product){
             throw Error('This Product already exist in this Center')
         }
-
-        const quantite = 0
 
         const data = await CenterProduct.create({codeCp , name , designCp , price , quantite, codeCt })
 
@@ -46,34 +44,39 @@ const updateCenterProduct = async (req, res) => {
     const { codeCp, codeCt } = req.params;
     const { name, designCp, price, quantite } = req.body;
 
-    console.log(req.params)
+    try {
+        // Assuming codeCp and codeCt are string values
+        const existingData = await CenterProduct.findOne({ codeCp, codeCt });
 
-    try {   
-        if (quantite < 0 || price < 0) {
-            throw Error('Enter Real Values');
+        if (!existingData) {
+            console.log('Document not found');
+            return res.status(404).json({ error: 'Document not found' });
         }
 
-        // Assuming codeCp and codeCt are string values
+        // Update only the fields that are provided in the request
+        const updatedData = {
+            name: name || existingData.name,
+            designCp: designCp || existingData.designCp,
+            price: price ? price : existingData.price, // Only update if price is non-negative
+            quantite: quantite ? quantite : existingData.quantite // Only update if quantite is non-negative
+        };
+
+        // Update the document
         const data = await CenterProduct.findOneAndUpdate(
-            { codeCp , codeCt},
-            { name, designCp, price, quantite },
-            { new: true } // This option returns the modified document rather than the original
+            { codeCp, codeCt },
+            updatedData,
+            { new: true }
         );
 
-
-        if (data) {
-            console.log('Updated document:', data);
-            res.status(200).json(data);
-        } else {
-            console.log('Document not found');
-            res.status(404).json({ error: 'Document not found' });
-        }
+        res.status(200).json(data);
 
     } catch (error) {
         console.error('Error updating document:', error);
         res.status(500).json({ error: error.message });
     }
 };
+
+
 
 
 const deleteCenterProduct = async(req,res)=>{

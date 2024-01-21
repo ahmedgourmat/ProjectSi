@@ -19,7 +19,7 @@ const getProducts = async(req,res)=>{
 
 const postProduct = async(req,res)=>{
 
-    const {codeP , designP , price} = req.body
+    const {codeP , designP , price , nameP} = req.body
 
     try {
 
@@ -31,8 +31,8 @@ const postProduct = async(req,res)=>{
 
         const qteStock = 0
 
-        const data = await Product.create({codeP , designP , qteStock , price})
-        // console.log(data) 
+        const data = await Product.create({codeP , designP , qteStock , nameP , price})
+        console.log(data) 
         res.status(201).json({data})
     } catch (error) {
         res.status(500).json({error : error.message})

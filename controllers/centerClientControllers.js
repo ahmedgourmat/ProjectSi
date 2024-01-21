@@ -8,11 +8,12 @@ const getCenterClient = async(req, res)=>{
     try {
         const data = await CenterClient.find({codeCt})
 
-        if(data){
-            res.status(200).json(data)
+        if(!data){
+            throw Error('There is no Center Client here')
         }
 
-        throw Error('There is no Center Client here')
+        
+        res.status(200).json(data)
 
     } catch (error) {
         res.status(500).json({error : error.message})
@@ -22,11 +23,18 @@ const getCenterClient = async(req, res)=>{
 
 const postCenterClient = async(req , res)=>{
     const {codeCc , nameCc , prenomCc , telCc , adrCc , codeCt } = req.body
+    console.log(req.body)
 
     try {
         
         if(!codeCc || !nameCc || !prenomCc || !telCc || !adrCc ){
             throw Error('Please fill all the fields')
+        }
+
+        const client = await CenterClient.findOne({codeCc})
+
+        if(client){
+            throw Error ("there is a client with this code")
         }
 
         const credit = 0
@@ -69,6 +77,9 @@ const updateCenterClient = async (req, res) => {
 
 const deleteCenterClient = async(req , res)=>{
     const  {codeCc , codeCt} = req.params
+    console.log(req.params)
+
+    console.log(codeCc) 
 
 
     try {
